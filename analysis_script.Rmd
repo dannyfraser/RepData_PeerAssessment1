@@ -1,0 +1,80 @@
+---
+title: "Reproducible Research: Peer Assessment 1"
+output: 
+  html_document:
+    keep_md: true
+---
+```{r echo = TRUE, warning = FALSE, message = FALSE}
+    library(readr)
+    library(dplyr)
+    library(ggplot2)
+    library(lubridate)
+```
+
+## Loading and preprocessing the data
+```{r echo = TRUE}
+    unzip("activity.zip", overwrite = TRUE)
+    activity <- read_csv("activity.csv") %>% 
+        mutate(interval = sprintf("%04d", interval))
+    activity$interval <- as.POSIXct(strptime(x = activity$interval, "%H%M"))
+```
+
+
+## What is mean total number of steps taken per day?
+
+This prepares the data by summing the steps per day.
+```{r echo = TRUE, warning = FALSE}
+    
+    activityTotals <- activity %>% 
+        select(date,  steps) %>% 
+        group_by(date) %>% 
+        summarise(total_steps = sum(steps, na.rm = TRUE))
+```
+
+1. Make a histogram of the total number of steps each day
+```{r echo = TRUE, warning = FALSE}
+    qplot(
+        x = activityTotals$date,
+        xlab = "Date",
+        y = activityTotals$total_steps, 
+        ylab = "Total Steps",
+        geom = "histogram",
+        stat = "identity",
+        fill = I("steelblue"))
+
+```
+
+2. Calculate and report the **mean** and **median** total number of steps each day.
+```{r echo = TRUE, warning = FALSE}
+    mean(activityTotals$total_steps)
+    median(activityTotals$total_steps)
+```
+
+## What is the average daily activity pattern?
+
+```{r echo = TRUE, warning = FALSE}
+    
+    activityByPeriod <- activity %>% 
+        select(interval, steps) %>% 
+        group_by(interval) %>% 
+        summarise(mean_steps = mean(steps, na.rm = TRUE))
+```
+
+1. Make a time series plot of the average number of steps taken in each interval across all days
+```{r echo = TRUE, warning = FALSE}
+    qplot(data = activityByPeriod,
+          x = interval,
+          y = mean_steps,
+          xlab = "Interval",
+          ylab = "Average Steps",
+          geom = "line")
+
+```
+
+
+
+## Imputing missing values
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?
