@@ -63,7 +63,7 @@ This prepares the data by summing the steps per day.
 1. Make a time series plot of the average number of steps taken in each interval across all days
 ```{r echo = TRUE, warning = FALSE}
     qplot(data = activityByPeriod,
-          x = interval,
+          x = strftime(interval, "%H%M"),
           y = mean_steps,
           xlab = "Interval",
           ylab = "Average Steps",

@@ -4,3 +4,5 @@
 activity.csv
 activity.zip
 analysis_script_files/*
+*.html
+analysis_script.md
