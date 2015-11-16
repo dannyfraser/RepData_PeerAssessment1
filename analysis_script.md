@@ -28,21 +28,16 @@ This prepares the data by summing the steps per day.
     activityTotals <- activity %>% 
         select(date,  steps) %>% 
         group_by(date) %>% 
-        summarise(total_steps = sum(steps, na.rm = TRUE))
+        summarise(total_steps = sum(steps, na.rm = FALSE))
 ```
 
 1. Make a histogram of the total number of steps each day
 
 ```r
-    qplot(
-        x = activityTotals$date,
-        xlab = "Date",
-        y = activityTotals$total_steps, 
-        ylab = "Total Steps",
-        main = "Total Steps per Day (with missing values)",
-        geom = "histogram",
-        stat = "identity",
-        fill = I("steelblue"))
+    ggplot(activityTotals, aes(x = total_steps)) +
+        geom_histogram() +
+        labs(title = "Total Steps Per Day (with missing values)", 
+             xlab = "Total Steps", ylab = "Count")
 ```
 
 ![](analysis_script_files/figure-html/dailyHistogram-1.png) 
@@ -50,19 +45,19 @@ This prepares the data by summing the steps per day.
 2. Calculate and report the **mean** and **median** total number of steps each day.
 
 ```r
-    mean(activityTotals$total_steps)
+    mean(activityTotals$total_steps, na.rm = TRUE)
 ```
 
 ```
-## [1] 9354.23
+## [1] 10766.19
 ```
 
 ```r
-    median(activityTotals$total_steps)
+    median(activityTotals$total_steps, na.rm = TRUE)
 ```
 
 ```
-## [1] 10395
+## [1] 10765
 ```
 
 ## What is the average daily activity pattern?
@@ -130,15 +125,10 @@ The approach used here is to replace any missing values with the average number 
 4. Make a histogram of total steps per day, then show the **mean** and **median**.
 
 ```r
-    qplot(
-        x = summarisedActivity$date,
-        xlab = "Date",
-        y = summarisedActivity$total_steps, 
-        ylab = "Total Steps",
-        main = "Total Steps Per Day (replaced missing values)",
-        geom = "histogram",
-        stat = "identity",
-        fill = I("steelblue"))
+    ggplot(summarisedActivity, aes(x = total_steps)) +
+        geom_histogram() +
+        labs(title = "Total Steps Per Day (replaced missing values)", 
+             xlab = "Total Steps", ylab = "Count")
 ```
 
 ![](analysis_script_files/figure-html/filledHist-1.png) 
@@ -159,8 +149,7 @@ The approach used here is to replace any missing values with the average number 
 ## [1] 10766.19
 ```
 
-The effect of imputing values in this manner has resulted in the mean and median being higher than previous, and gives us a mean equal to the median. The mean is quite significantly higher than the data with missing values, but the median is relatively similar.
-
+The effect of imputing values in this manner has resulted in the mean and median being equal.
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
