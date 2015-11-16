@@ -128,7 +128,8 @@ The approach used here is to replace any missing values with the average number 
     ggplot(summarisedActivity, aes(x = total_steps)) +
         geom_histogram() +
         labs(title = "Total Steps Per Day (replaced missing values)", 
-             xlab = "Total Steps", ylab = "Count")
+             xlab = "Total Steps", 
+             ylab = "Count")
 ```
 
 ![](analysis_script_files/figure-html/filledHist-1.png) 
